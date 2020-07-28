@@ -1,4 +1,4 @@
-Analyze leetcode questions and Giving java code
+Analyzing leetcode questions and Giving java code
 =========================================
 Question 1: Max Unrepeated Substring
 ---------------------
