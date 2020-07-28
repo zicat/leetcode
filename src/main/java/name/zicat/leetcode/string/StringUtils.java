@@ -29,20 +29,23 @@ public class StringUtils {
         while (rightPoint < s.length()) {
             char c = s.charAt(rightPoint);
             if(set.contains(c)) {
+                //recompute the maxsize
                 if(rightPoint - leftPoint > maxSize) {
                     maxSize = rightPoint - leftPoint;
                     maxSizeStart = leftPoint;
                 }
+                //remove all the chars that is front the c
                 while (leftPoint < rightPoint && s.charAt(leftPoint) != c) {
                     set.remove(s.charAt(leftPoint));
                     leftPoint ++;
                 }
+                //point the c + 1
                 leftPoint++;
             }
             set.add(c);
             rightPoint++;
         }
-
+        //recompute the maxsize, avoid all chars are different
         if (rightPoint - leftPoint > maxSize) {
             maxSize = rightPoint - leftPoint;
             maxSizeStart = leftPoint;
