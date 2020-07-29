@@ -62,7 +62,6 @@ public class ArrayUtils {
             int aMiddle = aOffset + (aSize / 2);
             //find the count of Value in b less then aMiddle
             int countLessThenAMiddleInBArray = countInAscendingOrderArrayLessThenK(b, bOffset, bSize, a[aMiddle]);
-//            System.out.println("k:" + k + " a:[" + a[aOffset] + ":" + a[aOffset + aSize - 1] + "] b:[" + b[bOffset] + ":" + b[bOffset + bSize - 1] + "]");
 
             if(aSize == 1)
                 return countLessThenAMiddleInBArray == (k -1)? a[aMiddle]: countLessThenAMiddleInBArray < (k - 1)?b[bOffset + k - 2]: b[bOffset + k - 1];
