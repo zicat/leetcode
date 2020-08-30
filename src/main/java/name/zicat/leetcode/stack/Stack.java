@@ -5,7 +5,7 @@ import java.util.EmptyStackException;
 /**
  * 先进 后出
  */
-public class Stack {
+public class Stack<T> {
 
 	private static class StackNode<T> {
 		private T data;
@@ -19,7 +19,7 @@ public class Stack {
 	/**
 	 * 对栈顶元素的操作
 	 */
-	private StackNode top;
+	private StackNode<T> top;
 
 	/**
 	 * 从栈顶取元素

@@ -11,5 +11,23 @@ package name.zicat.leetcode.queue;
  *
  * 4.基于堆实现的优先队列的插入复杂度是O(logN)
  */
-public class PriorityQueue {
+public class PriorityQueue<T> {
+
+	public void add(T data) {
+
+
+	}
+
+	public T  peek(){
+
+		return null;
+	}
+
+	public T poll(){
+		return null;
+	}
+
+	public int size(){
+		return 0;
+	}
 }
