@@ -4,6 +4,13 @@ import java.util.EmptyStackException;
 
 /**
  * 先进 后出
+ *
+ * 总结
+ * 括号的题目想到用栈
+ *
+ * 有配对关系的题目可以用栈
+ *
+ *
  */
 public class Stack<T> {
 

@@ -5,7 +5,7 @@ package name.zicat.leetcode.queue;
  *
  * 从 尾部 追加,头部 取出
  */
-public class Queue {
+public class Queue<T> {
 
 	private static class QueueNode<T> {
 		private T data;

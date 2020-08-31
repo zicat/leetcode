@@ -1,6 +1,6 @@
 package name.zicat.leetcode.stack;
 
-import name.zicat.leetcode.queue.PriorityQueue;
+import name.zicat.leetcode.queue.PriorityQueueTest;
 
 /**
  * 295 数据流的中位数
@@ -21,16 +21,16 @@ public class MedianFinder {
 	 * 当前大顶堆和小顶堆的元素个数之和
 	 */
 	private int count;
-	private PriorityQueue<Integer> maxheap;
-	private PriorityQueue<Integer> minheap;
+	private PriorityQueueTest<Integer> maxheap;
+	private PriorityQueueTest<Integer> minheap;
 
 	/**
 	 * initialize your data structure here.
 	 */
 	public MedianFinder() {
 		count = 0;
-		maxheap = new PriorityQueue<>((x, y) -> y - x);
-		minheap = new PriorityQueue<>();
+		maxheap = new PriorityQueueTest<>((x, y) -> y - x);
+		minheap = new PriorityQueueTest<>();
 	}
 
 	public void addNum(int num) {

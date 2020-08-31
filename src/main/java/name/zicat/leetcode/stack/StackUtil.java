@@ -1,7 +1,10 @@
 package name.zicat.leetcode.stack;
 
 /**
- *
+ * 总结
+ *  * 括号的题目想到用栈
+ *  *
+ *  * 有配对关系的题目可以用栈
  */
 public class StackUtil {
 	/**
@@ -249,6 +252,30 @@ public class StackUtil {
 			maxarea = Math.max(maxarea, leetcode84(dp));
 		} return maxarea;
 	}
+
+	/**
+	 * 503
+	 */
+
+	/**
+	 * 895
+	 */
+
+	/**
+	 * 353
+	 */
+
+	/**
+	 * 621
+	 */
+
+	/**
+	 * 622
+	 */
+
+	/**
+	 * 862
+	 */
 
 
 

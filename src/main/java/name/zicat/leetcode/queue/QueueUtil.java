@@ -2,7 +2,12 @@ package name.zicat.leetcode.queue;
 
 import name.zicat.leetcode.array.ListNode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class QueueUtil {
 	/**
@@ -66,7 +71,7 @@ public class QueueUtil {
 			return null;
 		}
 
-		PriorityQueue<ListNode> queue = new PriorityQueue<>();
+		PriorityQueueTest<ListNode> queue = new PriorityQueueTest<>();
 		//定义带头人
 		ListNode fakeHead = new ListNode(0);
 		ListNode p = fakeHead;
@@ -99,7 +104,7 @@ public class QueueUtil {
 	 */
 	public ListNode mergeKLists(ListNode[] lists) {
 		if (lists == null || lists.length == 0) return null;
-		PriorityQueue<ListNode> queue = new PriorityQueue<>(lists.length, new Comparator<ListNode>() {
+		PriorityQueue<ListNode> queue = new PriorityQueue<ListNode>(lists.length, new Comparator<ListNode>() {
 			@Override
 			public int compare(ListNode o1, ListNode o2) {
 				if (o1.val < o2.val) return -1;
@@ -118,6 +123,49 @@ public class QueueUtil {
 			if (p.next != null) queue.add(p.next);
 		}
 		return dummy.next;
+
+	}
+
+	/**
+	 * 621.任务调度器
+	 *
+	 * 在选择每一轮中的任务时，我们也可以用优先队列（堆）来代替排序。在一开始，我们把所有的任务加入到优先队列中。在每一轮，我们从优先队列中选择最多 n + 1 个任务，把它们的数量减去 1，再放回堆中（如果数量不为 0），直到堆为空。
+	 *  输入：tasks = ["A","A","A","B","B","B"], n = 2
+	 * 输出：8
+	 * 解释：A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
+	 *      在本示例中，两个相同类型任务之间必须间隔长度为 n = 2 的冷却时间，而执行一个任务只需要一个单位时间，所以中间出现了（待命）状态。
+	 *
+	 */
+
+	public static int leastInterval(char[] tasks,int n) {
+		int[] map = new int[26];
+		for (char c: tasks)
+			map[c - 'A']++;
+		PriorityQueue < Integer > queue = new PriorityQueue <> (26, Collections.reverseOrder());
+		for (int f: map) {
+			if (f > 0)
+				queue.add(f);
+		}
+		int time = 0;
+		while (!queue.isEmpty()) {
+			int i = 0;
+			List< Integer > temp = new ArrayList< >();
+			while (i <= n) {
+				if (!queue.isEmpty()) {
+					if (queue.peek() > 1)
+						temp.add(queue.poll() - 1);
+					else
+						queue.poll();
+				}
+				time++;
+				if (queue.isEmpty() && temp.size() == 0)
+					break;
+				i++;
+			}
+			for (int l: temp)
+				queue.add(l);
+		}
+		return time;
 
 	}
 
