@@ -2,7 +2,10 @@ package name.zicat.leetcode.index;
 
 import name.zicat.leetcode.array.ListNode;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.TreeMap;
 
 /**
  * 双指针和滑动窗口
@@ -94,6 +97,95 @@ public class Index {
 			max_len = Math.max(max_len, cur_len);
 		}
 		return max_len;
+	}
+
+	/**
+	 * 1438 绝对差 不超过限制的最长连续子数组
+	 *
+	 * nums=[8,2,4,7] limit =4
+	 *
+	 * 输出2
+	 */
+
+	public int longestSubArray(int[] A,int limit){
+		/**
+		 * 两个指正 维护 窗口
+		 */
+		int left =0;
+		int right;
+		int ans =0;
+		/**
+		 * treemap 保存最大值和最小值
+		 * 整数值 保存为 key key中 整数 在滑动窗口中的个数保存为 value
+		 */
+		// treemap add,remove,containsKey  o(nlogn)
+		TreeMap<Integer,Integer> m = new TreeMap<>();
+		/**
+		 * 移动右指针 扩大窗口的范围
+		 */
+		for(right =0;right <A.length;right ++){
+			m.put(A[right],1 + m.getOrDefault(A[right],0));
+			/**
+			 * 取最大值 减去 最小值
+			 */
+			while((m.lastEntry().getKey() - m.firstEntry().getKey())>limit){
+				//缩小 滑动窗口
+				m.put(A[left],m.get(A[left])-1);
+				if(m.get(A[left])==0){
+					m.remove(A[left]);
+				}
+				left ++;
+			}
+			ans = Math.max(ans,right - left +1);
+
+		}
+		return ans;
+
+	}
+
+	public int longestSubArray2(int[] A,int limit){
+		// complexity O(n)
+		Deque<Integer> maxd = new ArrayDeque<>();
+		Deque<Integer> mind = new ArrayDeque<>();
+		int i=0,j;
+		int ans =0;
+		for(j=0;j< A.length;++j){
+			while(!maxd.isEmpty() && A[j]>maxd.peekLast()) maxd.pollLast();
+			while(!mind.isEmpty() && A[j] < mind.peekLast()) mind.pollLast();
+			maxd.addLast(A[j]);
+			mind.addLast(A[j]);
+			while(maxd.peek() - mind.peek() > limit) {
+				if(maxd.peek() == A[i]) maxd.poll();
+				if(mind.peek() == A[i]) mind.poll();
+				++i;
+			}
+			ans = Math.max(ans,j-i+1);
+		}
+		return ans;
+	}
+
+	/**
+	 * 1004 最大连续 1的 个数,最多可以将K个0变成1
+	 * 输入 A [1,1,1,0,0,0,1,1,1,1,0] K=2
+	 * [1,1,1,0,0,1,1,1,1,1]
+	 * 数字从 0 翻转到1,最长的子数组长度为 6
+	 *
+	 */
+
+	public int longestOnes(int[] A,int K) {
+		int left =0,right;
+		int ans =0;
+		for(right =0;right <A.length;right ++){
+			//移动右指针
+			if(A[right]==0) K--;
+			if(K < 0){
+				//移动左边指针
+				if(A[left] ==0) K++;
+				left ++;
+			}
+			ans = Math.max(ans,right- left +1);
+		}
+		return ans;
 	}
 
 

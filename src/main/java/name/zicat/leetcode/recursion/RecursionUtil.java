@@ -1,5 +1,9 @@
 package name.zicat.leetcode.recursion;
 
+import name.zicat.leetcode.tree.TreeNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -129,6 +133,122 @@ public class RecursionUtil {
 
          return first;
 
+	}
+
+	/**
+	 * 140. 单词拆分
+	 * 记忆化搜索
+	 * 给定一个非空字符串 s和一个包含非空单词列表的字典
+	 *
+	 * s ="catsanddog"
+	 *
+	 * wordDict = ["cat","cats","and","sand","dog"]
+	 *
+	 * wordDict = ["cats and dog","cat sand dog"]
+	 *
+	 * wordBreak("catsanddog") =
+	 * "cat" + "" + wordBreak("sanddog") -> "cat sand" + "" +wordBreak("dog");
+	 * 或者 "cats" + "" + wordBreak("anddog") -> "cats and" + "" + wordBreak("dog");
+	 *
+	 * 注意 "dog" 已经被检测过,不用重复计算,我们可以把它的结果存起来
+	 * 记忆化搜索, 中间结果保存在 数据结构中,遇到重复的不需要再计算
+
+	 */
+
+	public List<String> wordBreak(String s,List<String> wordDict){
+		return helper(s, wordDict, new HashMap<String, ArrayList<String>>());
+	}
+
+	//返回所有s对应的满足条件的结果
+	// s 为子串 比如 sanddog
+	private List<String> helper(String s, List<String> wordDict, HashMap<String, ArrayList<String>> prevRes) {
+	  //记忆化搜索的精髓,不进行重复计算
+		if(prevRes.containsKey(s)){
+			return prevRes.get(s);
+		}
+
+		ArrayList<String> result = new ArrayList<>();
+		//容易错,不要忘记base case  定义基础解
+		if(s.length() ==0){
+			result.add("");
+			return result;
+		}
+
+		for(String word:wordDict){
+			if(s.startsWith(word)){
+				//递归调用剩下的部分
+				List<String> subRes = helper(s.substring(word.length()),wordDict,prevRes);
+				//append 到后面
+				for(String sub:subRes){
+					result.add(word + (sub.isEmpty()?"": " ") + sub);
+				}
+			}
+		}
+		prevRes.put(s,result);
+		return result;
+	}
+	/**
+	 * 687.最长同值路径
+	 * 给定一个二叉树 找到最长的路径,这个路径每个节点具有相同的值
+	 * 递推方程 : helper(root) 表示以root为顶点的最大同值边长
+	 * 基础值: root ==null，返回 0
+	 * 每次function call 记录全局最大路径
+	 * 
+	 * 时间 O(n) n= number of tree nodes
+	 */
+	int ans =0;
+	public int longestUnivaluePath(TreeNode root){
+		if(root ==null){
+			return 0;
+		}
+		helperTree(root);
+		return ans;
+	}
+
+	private int helperTree(TreeNode root) {
+		//terminal
+		if(root ==null){
+			return 0;
+		}
+		int left = helperTree(root.left);
+		int	right = helperTree(root.right);
+		int pleft =0;
+		int pright =0;
+		//左子树的最大边长+1
+		if(root.left!=null&& root.val==root.left.val) pleft =left+1;
+		//右子树的最大边长+1
+		if(root.right!=null && root.val==root.right.val) pright =right +1;
+		//
+		this.ans = Math.max(this.ans,pleft+pright);
+		//左右中的最大值
+		return Math.max(pleft,pright);
+
+	}
+
+	/**
+	 * 783 二叉搜索树 结点最小距离
+	 *
+	 *
+	 */
+	Integer prev,ans1;
+	public int minDiffInBST(TreeNode root){
+		ans = Integer.MAX_VALUE;
+		prev = null;
+		inOrder(root);
+		return ans1;
+	}
+	//一定是升序的
+	public void inOrder(TreeNode node){
+		if(node==null) return;
+		//先处理左子树
+		inOrder(node.left);
+		//处理当前的节点
+		if(prev!=null){
+			ans1 = Math.min(ans,node.val-prev);
+		}
+		prev =node.val;
+		//再处理 右子树
+		inOrder(node.right);
 	}
 
 
