@@ -2,6 +2,7 @@ package name.zicat.leetcode.tree;
 
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -389,6 +390,51 @@ public class TreeUtils {
 		return root;
 	}
 
+	/**
+	 * 425.单词方块
+	 *
+	 * 单词序列
+	 */
+
+	/**
+	 * N 叉数的最大深度
+	 */
+
+	public int maxDepth(Node root){
+		if(root ==null){
+			return 0;
+		} else if(root.children.isEmpty()) {
+			return 1;
+		} else {
+			List<Integer> height = new LinkedList();
+			for(Node node:root.children){
+				height.add(maxDepth(node));
+			}
+			return Collections.max(height)+1;
+		}
+
+	}
+	/**
+	 * 二叉树最长连续序列
+	 */
+
+	private int maxLength = 0;
+	public int longestConsecutive(TreeNode root) {
+		dfs(root, null, 0);
+		return maxLength;
+	}
+
+	private void dfs(TreeNode p, TreeNode parent, int length) {
+		if (p == null) return;
+		length = (parent != null && p.val == parent.val + 1) ? length + 1 : 1;
+		maxLength = Math.max(maxLength, length);
+		dfs(p.left, p, length);
+		dfs(p.right, p, length);
+	}
+
+
+
+
 
 
 
@@ -405,3 +451,19 @@ public class TreeUtils {
 
 
 }
+
+class Node {
+	public int val;
+	public List<Node> children;
+
+	public Node() {}
+
+	public Node(int _val) {
+		val = _val;
+	}
+
+	public Node(int _val, List<Node> _children) {
+		val = _val;
+		children = _children;
+	}
+};

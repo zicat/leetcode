@@ -251,5 +251,32 @@ public class RecursionUtil {
 		inOrder(node.right);
 	}
 
+	/**
+	 * 1137 第N个 泰波那契数
+	 * n=4
+	 * 输出4
+	 * T_3 =0 +1 +1 =2
+	 * T_4 = 1+ 1+ 2 =4
+	 *
+	 */
+	HashMap<Integer,Integer> cache = new HashMap<>();
+	public int tribonacci(int n){
+		if(cache.containsKey(n)){
+			return cache.get(n);
+		}
+		if(n ==0){
+			cache.put(n,0);
+			return 0;
+		}
+		if(n==1 || n==2){
+			cache.put(n,1);
+			return 1;
+		}
+		int result = tribonacci(n-1) + tribonacci(n-2) + tribonacci(n-3);
+		cache.put(n,result);
+		return result;
+
+	}
+
 
 }
