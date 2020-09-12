@@ -81,7 +81,6 @@ public int rob(int[] nums){
 	return dp[nums.length];
 }
 
-}
 
 /**
  * 序列型 动态规划

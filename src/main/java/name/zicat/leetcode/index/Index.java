@@ -4,7 +4,9 @@ import name.zicat.leetcode.array.ListNode;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -187,6 +189,214 @@ public class Index {
 		}
 		return ans;
 	}
+	/**
+	 * 反转字符串
+	 * 输入 [h,e,l,l,o]
+	 * 输出 [o,l,l,e,h]
+	 */
+	public void reverseString(char[] s){
+		int left =0;
+		int right = s.length -1;
+		while(left <= right){
+			char temp = s[right];
+			s[right] = s[left];
+			s[left] = temp;
+			left ++;
+			right --;
+		}
+
+	}
+
+	/**
+	 * 和相同的二元子数组
+	 *
+	 * 由若干0和1组成的数组A中,有多少个和为S的非空子数组
+	 *
+	 * 输入 A=[1,0,1,0,1] S=2
+	 * 输出 :4
+	 * ['1,0,1',0,1]
+	 * ['1,0,1,0',1]
+	 * [1,'0,1,0,1']
+	 * [1,0,'1,0,1']
+	 */
+
+	/**
+	 * 双指针 效率低
+	 * @param A
+	 * @param S
+	 * @return
+	 */
+	public static int numSubArraysWithSum(int[] A,int S){
+
+		int left;
+		int right=0;
+		int sum =0;
+		int count =0;
+		for(;right<A.length;right++){
+			left =right;
+			while(left>=0){
+				sum = sum +A[left];
+				if(sum ==S){
+					count = count +1;
+				} else if(sum >S){
+					break;
+				}
+				left --;
+			}
+			sum =0;
+		}
+		return count;
+	}
+
+	/**
+	 * 三指针法
+	 * 和相同的二元子数组
+	 *
+	 * 我们遍历区间的右端点 j，同时维护四个变量：
+	 *
+	 * sum_lo：A[i_lo..j] 的值；
+	 *
+	 * sum_hi：A[i_hi..j] 的值；
+	 *
+	 * i_lo：最小的满足 sum_lo <= S 的 i；
+	 *
+	 * i_hi：最大的满足 sum_hi <= S 的 i。
+	 *
+	 * 例如，当数组 A 为 [1,0,0,1,0,1]，S 的值为 2 。当 j = 5 时，i_lo 的值为 1，i_hi 的值为 3。对于每一个 j，和为 S 的非空子数组的数目为 i_hi - i_lo + 1。
+	 */
+
+	public static int numSubArrayWithSum(int[] A,int S){
+		int iLo = 0,iHi=0;
+		int sumLo=0,sumHi =0;
+		int ans =0;
+		for(int j=0;j<A.length;j++){
+			sumLo +=A[j];
+			while(iLo<j && sumLo>S){
+				sumLo-=A[iLo++];
+				//相当于 sumLo-=A[iLo],iLo++
+			}
+			sumHi +=A[j];
+			/**
+			 * Hi 两种情况
+			 * A[iHi] =1的话只要判断 sumHi>s即可
+			 * A[iHi] =0的话,要判断 sumHi ==S
+			 */
+			while(iHi<j &&(sumHi > S ||sumHi ==S &&A[iHi]==0))
+				sumHi -=A[iHi++];
+
+			if(sumLo ==S){
+				ans += iHi-iLo +1;
+			}
+		}
+		return ans;
+	}
+
+	/**
+	 * K个不同整数的子数组
+	 * 给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
+	 *
+	 * （例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+	 *
+	 * 返回 A 中好子数组的数目。
+	 * 输入：A = [1,2,1,2,3], K = 2
+	 * 输出：7
+	 * 解释：恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+	 *
+	 * 输入：A = [1,2,1,3,4], K = 3
+	 * 输出：3
+	 * 解释：恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
+	 *
+	 */
+
+	/**
+	 * 暴力解法 会超时
+	 * @param A
+	 * @param K
+	 * @return
+	 */
+	public static int subArrayWithKDistinct(int[] A,int K){
+		HashSet set = new HashSet();
+		int left;
+		int right=0;
+		int count =0;
+		for(;right<A.length;right++){
+			left =right;
+			while(left>=0){
+				set.add(A[left]);
+				if(set.size() ==K){
+					count = count +1;
+				} else if(set.size()>K){
+					break;
+				}
+				left --;
+			}
+			set.clear();
+		}
+		return count;
+
+	}
+
+	/**
+	 * 滑动窗口解法
+	 * 我们要维护两个滑动窗口以维护
+	 * 每一个滑动窗口能够计算窗口内有多少个不同的数字，并且支持像队列一样动态的增加 / 移除元素
+	 *
+	 */
+
+	public int subarraysWithKDistinct(int[] A, int K) {
+		Window window1 = new Window();
+		Window window2 = new Window();
+		int ans = 0, left1 = 0, left2 = 0;
+
+		for (int right = 0; right < A.length; ++right) {
+			int x = A[right];
+			window1.add(x);
+			window2.add(x);
+
+			while (window1.different() > K)
+				window1.remove(A[left1++]);
+			while (window2.different() >= K)
+				window2.remove(A[left2++]);
+
+			ans += left2 - left1;
+		}
+
+		return ans;
+	}
 
 
+	public static void main(String[] args) {
+		int[] A = {1,0,1,0,1};
+		System.out.println("A = " + numSubArrayWithSum(A, 2));
+	}
+
+
+
+
+}
+
+class Window {
+	Map<Integer, Integer> count;
+	int nonzero;
+
+	Window() {
+		count = new HashMap();
+		nonzero = 0;
+	}
+
+	void add(int x) {
+		count.put(x, count.getOrDefault(x, 0) + 1);
+		if (count.get(x) == 1)
+			nonzero++;
+	}
+
+	void remove(int x) {
+		count.put(x, count.get(x) - 1);
+		if (count.get(x) == 0)
+			nonzero--;
+	}
+
+	int different() {
+		return nonzero;
+	}
 }

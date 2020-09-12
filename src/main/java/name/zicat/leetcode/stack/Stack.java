@@ -33,7 +33,7 @@ public class Stack<T> {
 	 * @return
 	 */
 	public T pop(){
-		if(top == null) throw EmptyStackException();
+		if(top == null) throw new RuntimeException();
 		T value = top.data;
 		/**
 		 * 栈顶的指针指向 下一个

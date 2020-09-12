@@ -48,7 +48,7 @@ public class SortUtil {
 		if(k<1 || nums == null) {
 			return 0;
 		}
-		return getKth(nums.length -k +1,nums,0,nums.length -1)
+		return getKth(nums.length -k +1,nums,0,nums.length -1);
 
 	}
 

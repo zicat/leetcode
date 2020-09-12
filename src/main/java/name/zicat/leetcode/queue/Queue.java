@@ -11,18 +11,18 @@ public class Queue<T> {
 		private T data;
 		private QueueNode<T> next;
 
-		public QueueNode(T data){this.data = data}
+		public QueueNode(T data){this.data = data;}
 	}
 
-	private QueueNode first;
-	private QueueNode last;
+	private QueueNode<T> first;
+	private QueueNode<T> last;
 
 	/**
 	 * 从队首取出元素
 	 * @return
 	 */
 	public T remove(){
-		if(first == null)  throw EmptyQueueException();
+		if(first == null)  throw new RuntimeException();
 
 		T value = first.data;
 		first = first.next;
@@ -51,7 +51,7 @@ public class Queue<T> {
 	 * @return
 	 */
 	public T peek(){
-		if(first == null) throw new EmptyQueueException();
+		if(first == null) throw new RuntimeException();
 		return first.data;
 	}
 
