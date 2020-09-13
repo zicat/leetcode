@@ -1,7 +1,9 @@
 package name.zicat.leetcode.sort;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class SortUtil {
 	/**
@@ -239,5 +241,129 @@ public class SortUtil {
 	private int dist(int[] point, int[] pivot) {
 		return point[0] * point [0] + point[1] * point[1]
 				- pivot[0]* pivot[0] - pivot[1] * pivot[1];
+	}
+
+	/**
+	 * 按奇偶排序数组
+	 * 给定一个非负整数数组 A， A 中一半整数是奇数，一半整数是偶数。
+	 *
+	 * 对数组进行排序，以便当 A[i] 为奇数时，i 也是奇数；当 A[i] 为偶数时， i 也是偶数。
+	 *
+	 * 你可以返回任何满足上述条件的数组作为答案
+	 * 输入：[4,2,5,7]
+	 * 输出：[4,5,2,7]
+	 * 解释：[4,7,2,5]，[2,5,4,7]，[2,7,4,5] 也会被接受。
+	 */
+	public static int[] sortArrayByParity2(int[] A){
+		int odd =1;
+		Integer notoddIndex =null;
+		Integer noteventIndex =null;
+		int even =0;
+		while(odd < A.length){
+			if(notoddIndex==null){
+				if(A[odd] %2 !=1){
+					notoddIndex = odd;
+				} else {
+					odd = odd + 2;
+				}
+			}
+
+			if(noteventIndex ==null && even < A.length){
+				if(A[even] % 2 !=0){
+					noteventIndex = even;
+				} else {
+					even = even + 2;
+				}
+			}
+
+			if(noteventIndex!=null && notoddIndex!=null){
+				int temp = A[notoddIndex];
+				A[notoddIndex] = A[noteventIndex];
+				A[noteventIndex] = temp;
+				noteventIndex = null;
+				notoddIndex = null;
+			}
+
+		}
+		return A;
+
+	}
+
+	/**
+	 * 按奇偶排序数组
+	 * 双指针 正解
+	 * 时间复杂度： O(N)，其中 N 是 A 的长度。
+	 */
+	public static int[] sortArrayByParity3(int[] A) {
+		int j = 1;
+		for (int i = 0; i < A.length; i += 2)
+			if (A[i] % 2 == 1) {
+				while (A[j] % 2 == 1)
+					j += 2;
+
+				// Swap A[i] and A[j]
+				int tmp = A[i];
+				A[i] = A[j];
+				A[j] = tmp;
+			}
+
+		return A;
+	}
+
+	/**
+	 * 将矩阵按对角线排序
+	 * 对角线 是 横坐标和 纵纵坐标+1
+	 * @param
+	 */
+	public int[][] diagonalSort(int[][] mat) {
+		// 行数
+		int m = mat.length;
+		// 列数
+		int n = mat[0].length;
+		// 主对角线的条数
+		int dLen = m + n - 1;
+
+		// 每一条对角线都创建一个动态数组
+		ArrayList<Integer>[] diagonal = new ArrayList[dLen];
+		for (int i = 0; i < dLen; i++) {
+			diagonal[i] = new ArrayList<>(m);
+		}
+
+		// 遍历原始矩阵，把原始矩阵中的元素放进对应的动态数组中
+		// 主对角线上元素的特点是：纵坐标 - 横坐标 = 定值
+		// 加上偏移 m - 1 是为了能够放进数组中
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				diagonal[j - i + (m - 1)].add(mat[i][j]);
+			}
+		}
+
+		// 对每一个对角线上的动态数组分别进行升序排序
+		for (int i = 0; i < dLen; i++) {
+			Collections.sort(diagonal[i]);
+		}
+
+		int[][] res = new int[m][n];
+
+		// 对角线数组上还未取出的元素的下标，初始化的时候均为 0
+		int[] next = new int[dLen];
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				// 对角线的坐标
+				int index = j - i + (m - 1);
+				// 记录结果
+				res[i][j] = diagonal[index].get(next[index]);
+				// 维护 next 数组的值
+				next[index]++;
+			}
+		}
+		return res;
+	}
+
+
+
+	public static void main(String[] args) {
+		int[] A = {3,1,3,2,2,1,1,1,2,0,0,4,0,1,0,1,1,1,2,2};
+		System.out.println("A = " + Arrays.toString(sortArrayByParity2(A)));;
 	}
 }
