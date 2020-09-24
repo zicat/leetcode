@@ -2,6 +2,7 @@ package name.zicat.leetcode.tree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * 前缀树
@@ -16,6 +17,7 @@ import java.util.Map;
  */
 public class Trie {
 	private TrieNode root;
+	String[] words;
 
 	public Trie(){
 		root = new TrieNode();
@@ -32,7 +34,7 @@ public class Trie {
 	 */
 
 
-	public void insert(String word){
+	public void insert(String word,int index){
 		HashMap<Character,TrieNode> child = root.children;
 		//对word的字母进行循环
 		for(int i=0; i< word.length();i++){
@@ -46,6 +48,7 @@ public class Trie {
 			} else {
 				//新建一个 trieNode
 				next = new TrieNode(c);
+				next.end = index;
 				//更新子节点
 				child.put(c,next);
 			}
@@ -94,11 +97,34 @@ public class Trie {
 		return cur;
 
 	}
+	public String dfs() {
+		String ans = "";
+		Stack<TrieNode> stack = new Stack();
+		stack.push(root);
+		while (!stack.empty()) {
+			TrieNode node = stack.pop();
+			if (node.end > 0 || node == root) {
+				if (node != root) {
+					String word = words[node.end - 1];
+					if (word.length() > ans.length() ||
+							word.length() == ans.length() && word.compareTo(ans) < 0) {
+						ans = word;
+					}
+				}
+				for (TrieNode nei: node.children.values()) {
+					stack.push(nei);
+				}
+			}
+		}
+		return ans;
+	}
+
 }
 
 class TrieNode {
 	char c;
 	HashMap<Character,TrieNode> children = new HashMap<>();
+	int end;
 	/**
 	 * 标注节点是不是 字符串的结尾
 	 */

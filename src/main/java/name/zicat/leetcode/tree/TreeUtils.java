@@ -56,6 +56,8 @@ public class TreeUtils {
 	 * /\  \            /\   \
 	 *2 6  18          2 20  18
 	 *平衡二叉树的查找效率是O(logN),类似于二分法
+	 * 平衡二叉树节点的平衡因子，它指的是该节点的两个子树，即左子树和右子树的高度差，即用左子树的高度减去右子树的高度，如果该节点的某个子树不存在，则该子树的高度为0,如果高度差的绝对值超过1就要根据情况进行调整。
+	 * https://blog.csdn.net/u014634338/article/details/42465089
 	 * 完全不平衡二叉树的查找效率是O(N)
 	 */
 
@@ -431,7 +433,76 @@ public class TreeUtils {
 		dfs(p.left, p, length);
 		dfs(p.right, p, length);
 	}
+	/**
+	 * 425.单词方块
+	 * 给定一个单词集合（没有重复),找出其中所有的单词方块
+	 *
+	 * 单词序列[ball,area,lead,lady] 形成的单词方块是
+	 *
+	 * 第一行和第一列相等
+	 * 根据 对角线 b r a y 作为对称轴 相互对称
+	 * b a l l
+	 * a r e a
+	 * l e a d
+	 * l a d y
+	 *
+	 * 不会
+	 */
 
+	/**
+	 * 212 单词搜索 2
+	 *
+	 */
+
+	/**
+	 * 词典中最长的单词
+	 * 给出一个字符串数组words组成的一本英语词典。从中找出最长的一个单词，该单词是由words词典中其他单词逐步添加一个字母组成。若其中有多个可行的答案，则返回答案中字典序最小的单词。
+	 *
+	 *输入：
+	 * words = ["w","wo","wor","worl", "world"]
+	 * 输出："world"
+	 * 解释：
+	 * 单词"world"可由"w", "wo", "wor", 和 "worl"添加一个字母组成。
+	 *
+	 * 输入：
+	 * words = ["a", "banana", "app", "appl", "ap", "apply", "apple"]
+	 * 输出："apple"
+	 * 解释：
+	 * "apply"和"apple"都能由词典中的单词组成。但是"apple"的字典序小于"apply"。
+	 *
+	 */
+
+
+	public String longestWord(String[] words) {
+		Trie trie = new Trie();
+		int index = 0;
+		for (String word: words) {
+			trie.insert(word, ++index); //indexed by 1
+		}
+		trie.words = words;
+		return trie.dfs();
+	}
+
+	/**
+	 * 226.翻转二叉树
+	 * 我们从根节点开始，递归地对树进行遍历，并从叶子结点先开始翻转。如果当前遍历到的节点 \textit{root}root 的左右两棵子树都已经翻转，那么我们只需要交换两棵子树的位置，即可完成以 \textit{root}root 为根节点的整棵子树的翻转。
+	 *
+	 */
+	public static TreeNode invertTree(TreeNode root) {
+         if(root ==null){
+         	return null;
+		 }
+         TreeNode left = invertTree(root.left);
+         TreeNode right = invertTree(root.right);
+         root.left = right;
+         root.right = left;
+         return root;
+
+	}
+	/**
+	 * 红黑树
+	 * https://www.jianshu.com/p/e136ec79235c
+	 */
 
 
 
