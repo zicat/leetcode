@@ -36,7 +36,7 @@ import java.util.HashMap;
  */
 public class LRUCache {
 	/**
-	 *  key
+	 *  key 和 节点 这个 节点 是在一个 双向链链表里面,有 pre和 next
 	 *  value ,Node的地址
 	 */
 	HashMap<Integer,Node>  map = new HashMap<>();

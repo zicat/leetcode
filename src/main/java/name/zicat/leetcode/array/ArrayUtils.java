@@ -1,11 +1,7 @@
 package name.zicat.leetcode.array;
 
 
-import sun.misc.OSEnvironment;
-
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * @author zhangjun
@@ -26,12 +22,16 @@ public class ArrayUtils {
         listNode4.next = listNode5;
 
         removeNthFromEnd(listNode1,2);*/
-       int[] sum = {1,1,1,2,2,3};
+     /*  int[] sum = {1,1,1,2,2,3};
         int len = removeDuplicateN2(sum);
         for(int i=0;i< len;i++){
             System.out.println(sum[i]);
-        }
+        }*/
 
+
+        int[] nums1 = {1,2};
+        int[] nums2 = {3,4,5};
+        System.out.println("nums2 = " + findMedianSortedArrays2(nums1,nums2));
 
 
         //subArraySumK(sum,2);
@@ -150,6 +150,143 @@ public class ArrayUtils {
     }
 
     /**
+     * 4.寻找两个数组中的中位数
+     * 且时间复杂度是 log(m + n),那就必须要用到 二分之类的
+     * m+ n 是奇数的情况 就是 要找到 (m+n)/2 如果是 偶数的情况是 (m+n)/2-1和 (m+n)/2
+     *
+     * 第一种方式 先合并数组再返回 中位数
+     */
+
+    public static final double findMedianSortedArrays(int[] nums1,int[] nums2){
+       int m = nums1.length;
+       int n = nums2.length;
+       int resultCount = m+n;
+       int[] resultNums = new int[resultCount] ;
+       int mOffset =0;
+       int nOffset =0;
+       int resultOffset =0;
+        /**
+         * 合并两个有序数组
+         */
+       while(resultOffset< m+n ){
+
+           /**
+            * 左数组已经全部进入新数组中,把右数组中的剩下的放入数组即可
+            */
+           if (mOffset == m) {
+              while(nOffset <n){
+                  resultNums[resultOffset++]= nums2[nOffset++];
+              }
+              break;
+           }
+
+           /**
+            * 右数组中全部进入新数组中,把左数组中的剩下的放入数组即可
+            */
+           if(nOffset == n){
+               while(mOffset <m){
+                   resultNums[resultOffset++]= nums1[mOffset++];
+               }
+               break;
+           }
+
+
+           /**
+            * 较小的值放入新数组中
+            */
+           if(nums1[mOffset] > nums2[nOffset]){
+               resultNums[resultOffset++] = nums2[nOffset++];
+           } else {
+               resultNums[resultOffset++] = nums1[mOffset++];
+           }
+
+       }
+
+        /**
+         * m+ n 是奇数的情况 就是 要找到 (m+n)/2 如果是 偶数的情况是 (m+n)/2-1和 (m+n)/2
+         */
+       if(resultCount %2 == 0){
+           return (resultNums[resultCount/2-1]+resultNums[resultCount/2])/2.0;
+       } else {
+           return resultNums[resultCount/2];
+       }
+
+
+    }
+    /**
+     * 4.寻找两个数的中位数 不开数组空间,前面一半排序即可
+     *
+     * m + n 是奇数的情况 就是 要排序到 (m+n)/2 如果是 偶数的情况是 (m+n)/2-1和 (m+n)/2
+     */
+    public static final double findMedianSortedArrays2(int[] nums1,int[] nums2){
+        int m = nums1.length;
+        int n = nums2.length;
+        int mOffset =0;
+        int nOffset =0;
+        int resultCount = m+n;
+        /**
+         * 设置两个点保存数据,left保证 (m+n)/2-1 right 保存 (m+n)/2
+         */
+        int left =0;
+        int right =0;
+        int countOffset =0;
+        /**
+         *
+         */
+        while(countOffset<=resultCount/2 ){
+            //left 是 right的前一个值
+            left = right;
+            /**
+             * 左边数据到
+             */
+            if(mOffset == m){
+               int diff = resultCount/2 - countOffset;
+               if(diff==0){
+                   right = nums2[nOffset+ diff];
+               } else if(diff >0){
+                   left = nums2[nOffset + diff -1];
+                   right = nums2[nOffset+ diff];
+               }
+               break;
+            }
+
+            if(nOffset == n){
+                int diff = resultCount/2 - countOffset;
+                if(diff==0){
+                    right = nums1[nOffset+ diff];
+                } else if(diff >0){
+                    left = nums1[nOffset + diff -1];
+                    right = nums1[nOffset+ diff];
+                }
+                break;
+            }
+
+            /**
+             * 较小的值放入right中,并且数据位移和 计算的指正也往后位移
+             */
+            if(nums1[mOffset] < nums2[nOffset]){
+                right = nums1[mOffset++];
+            } else {
+               right = nums2[nOffset++];
+            }
+            ++ countOffset;
+
+        }
+
+        /**
+         * m+ n 是奇数的情况 就是 要找到 (m+n)/2 如果是 偶数的情况是 (m+n)/2-1和 (m+n)/2
+         */
+        if(resultCount %2 == 0){
+            return (left + right)/2.0;
+        } else {
+            return right;
+        }
+    }
+
+
+
+
+    /**
      * https://leetcode-cn.com/problems/move-zeroes
      * move 0 to the end of array,
      * inputs [0,1,0,3,12]
@@ -162,6 +299,10 @@ public class ArrayUtils {
          * 记录下一个非0元素的位置
          */
         int j=0;
+        /**
+         * 这个循环只处理 当前不是 0的值,
+         * 如果 i和 j的值 有差异 说明之前 有值一定0的值,并且他的位置 是j,那就要做交换 把j的值是0,i是 非0做个交换
+         */
         for (int i=0;i< nums.length;i++) {
             /**
              * 不是 0的话 把元素  放到 j的位置
@@ -186,7 +327,11 @@ public class ArrayUtils {
     }
 
     /**
-     * 209长度最小的子数组. 子数组中的值累加 必须 >n.
+     * 209 长度最小的子数组. 子数组中的值累加 必须 >n.
+     * 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的 连续 子数组，并返回其长度。如果不存在符合条件的子数组，返回 0
+     * 输入：s = 7, nums = [2,3,1,2,4,3]
+     * 输出：2
+     * 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
      */
     public static final int minLengthArray(int[] nums, int n){
 
@@ -250,6 +395,12 @@ public class ArrayUtils {
 
     /**
      *  26.删除排序数组中的重复项
+     *  给定数组 nums = [1,1,2],
+     *
+     * 函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。
+     *
+     * 你不需要考虑数组中超出新长度后面的元素
+     *
      */
     public static int removeDuplicate(int[] nums) {
         int i=0;
@@ -278,6 +429,13 @@ public class ArrayUtils {
      * input [1,1,1] 2
      *
      * output [1,1] [1,1] 2
+     * 给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
+     *
+     * 示例 1 :
+     *
+     * 输入:nums = [1,1,1], k = 2
+     * 输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+     *
      *
      * 想办法判断它的值减去K的值是否存在于前缀和数组中即可。
      */
@@ -303,6 +461,9 @@ public class ArrayUtils {
          * 想办法判断它的值减去K的值是否存在于前缀和数组中即可
          */
 
+        /**
+         * key 为子数组的和, value为 这个值的数量
+         */
         HashMap<Integer,Integer> hashMap=new HashMap<Integer, Integer>();
 
         for(int preSubSum: preSum){
@@ -433,6 +594,10 @@ public class ArrayUtils {
      * input 2->1->3->5->6->4->7->NULL
      * output 2->3->6->7->1->5->4->NULL
      *
+     * 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+     *
+     * 请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数
+     *
      * 用原地算法 即用 带头人来做
      */
     public static ListNode oddEvenList(ListNode head) {
@@ -495,7 +660,9 @@ public class ArrayUtils {
             end = end.next;
             if(count == n){
                 findnode = head;
-
+                /**
+                 *
+                 */
             } else if(count > n){
                 temp = findnode;
                 findnodePre = temp;

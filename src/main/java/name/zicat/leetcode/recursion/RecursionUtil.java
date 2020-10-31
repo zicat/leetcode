@@ -54,6 +54,14 @@ public class RecursionUtil {
 
 	/**
 	 * 括号生成 leetcode 22
+	 * 输入：n = 3
+	 * 输出：[
+	 *        "((()))",
+	 *        "(()())",
+	 *        "(())()",
+	 *        "()(())",
+	 *        "()()()"
+	 *      ]
 	 */
 	public static List<String> generateParenthesis(int n){
 		//_generate(0,2 * n,"");

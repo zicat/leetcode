@@ -20,6 +20,7 @@ public class SortUtil {
 	 *
 	 * 算法
 	 * 长度为 7
+	 *
 	 * k =4,转化为找 第4个最小元素 (7-4+1)
 	 *
 	 * left->11 12 4 3 5 9 8<-right

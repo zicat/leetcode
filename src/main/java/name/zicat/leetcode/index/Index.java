@@ -66,8 +66,27 @@ public class Index {
 
 	}
 	/**
-	 * 无重复字符的最长子串
+	 * 3.无重复字符的最长子串
 	 * 滑动窗口 来做
+	 *
+	 * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+	 *
+	 * 示例 1:
+	 *
+	 * 输入: "abcabcbb"
+	 * 输出: 3
+	 * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+	 * 示例 2:
+	 *
+	 * 输入: "bbbbb"
+	 * 输出: 1
+	 * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+	 * 示例 3:
+	 *
+	 * 输入: "pwwkew"
+	 * 输出: 3
+	 * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+	 *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
 	 *
 	 * 定义 两个指针和一个 set
 	 *
@@ -79,6 +98,9 @@ public class Index {
 	 *
 	 */
 	public int lengthOfLongestSubstring(String s) {
+		/**
+		 * 临界情况
+		 */
 		if (s == null){
 			return 0;
 		}
@@ -107,6 +129,23 @@ public class Index {
 	 * nums=[8,2,4,7] limit =4
 	 *
 	 * 输出2
+	 *
+	 * 示例 1：
+	 *
+	 * 输入：nums = [8,2,4,7], limit = 4
+	 * 输出：2
+	 * 解释：所有子数组如下：
+	 * [8] 最大绝对差 |8-8| = 0 <= 4.
+	 * [8,2] 最大绝对差 |8-2| = 6 > 4.
+	 * [8,2,4] 最大绝对差 |8-2| = 6 > 4.
+	 * [8,2,4,7] 最大绝对差 |8-2| = 6 > 4.
+	 * [2] 最大绝对差 |2-2| = 0 <= 4.
+	 * [2,4] 最大绝对差 |2-4| = 2 <= 4.
+	 * [2,4,7] 最大绝对差 |2-7| = 5 > 4.
+	 * [4] 最大绝对差 |4-4| = 0 <= 4.
+	 * [4,7] 最大绝对差 |4-7| = 3 <= 4.
+	 * [7] 最大绝对差 |7-7| = 0 <= 4.
+	 * 因此，满足题意的最长子数组的长度为 2 。
 	 */
 
 	public int longestSubArray(int[] A,int limit){
@@ -145,6 +184,12 @@ public class Index {
 
 	}
 
+	/**
+	 * 看不懂
+	 * @param A
+	 * @param limit
+	 * @return
+	 */
 	public int longestSubArray2(int[] A,int limit){
 		// complexity O(n)
 		Deque<Integer> maxd = new ArrayDeque<>();
@@ -180,6 +225,7 @@ public class Index {
 		for(right =0;right <A.length;right ++){
 			//移动右指针
 			if(A[right]==0) K--;
+			//如果窗口内 K的个数超过限制开始 收缩窗口
 			if(K < 0){
 				//移动左边指针
 				if(A[left] ==0) K++;
@@ -232,6 +278,9 @@ public class Index {
 		int right=0;
 		int sum =0;
 		int count =0;
+		/**
+		 * 遍历某点,让 left指针 等于 right,并且 while(left) 一直减减计算,如果count >1
+		 */
 		for(;right<A.length;right++){
 			left =right;
 			while(left>=0){
