@@ -9,3 +9,4 @@ package name.zicat.leetcode.queue;
  */
 public class Deques {
 }
+

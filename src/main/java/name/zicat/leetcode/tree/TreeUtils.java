@@ -505,6 +505,31 @@ public class TreeUtils {
 	 */
 
 
+	/*public static boolean isSubStructure (TreeNode rootA,TreeNode rootB) {
+
+	}
+
+	public static boolean isSub(TreeNode A,TreeNode B){
+		if()
+
+	}
+
+	boolean isSub(TreeNode A, TreeNode B) {
+		//这里如果B为空，说明B已经访问完了，确定是A的子结构
+		if (B == null)
+			return true;
+		//如果B不为空A为空，或者这两个节点值不同，说明B树不是
+		//A的子结构，直接返回false
+		if (A == null || A.val != B.val)
+			return false;
+		//当前节点比较完之后还要继续判断左右子节点
+		return isSub(A.left, B.left) && isSub(A.right, B.right);
+	}*/
+
+
+
+
+
 }
 
 class Node {

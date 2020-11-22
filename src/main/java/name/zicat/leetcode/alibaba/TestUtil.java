@@ -5,6 +5,9 @@ import name.zicat.leetcode.tree.TreeNode;
 public class TestUtil {
 	public static void main(String[] args) throws Exception{
 
+		int[] A = {5,-3,5};
+		System.out.println("maxSubArraySumCircular(A) = " + maxSubArraySumCircular(A));
+
 	}
 
 
@@ -153,6 +156,83 @@ public class TestUtil {
 
 		return -1;
 	}
+
+	/**
+	 * 918
+	 * 给定一个由整数数组 A 表示的环形数组 C，求 C 的非空子数组的最大可能和。
+	 *
+	 * 在此处，环形数组意味着数组的末端将会与开头相连呈环状。（形式上，当0 <= i < A.length 时 C[i] = A[i]，且当 i >= 0 时 C[i+A.length] = C[i]）
+	 *
+	 * 示例 1：
+	 *
+	 * 输入：[1,-2,3,-2]
+	 * 输出：3
+	 * 解释：从子数组 [3] 得到最大和 3
+	 * 示例 2：
+	 *
+	 * 输入：[5,-3,5]
+	 * 输出：10
+	 * 解释：从子数组 [5,5] 得到最大和 5 + 5 = 10
+	 * 示例 3：
+	 *
+	 * 输入：[3,-1,2,-1]
+	 * 输出：4
+	 * 解释：从子数组 [2,-1,3] 得到最大和 2 + (-1) + 3 = 4
+	 * 示例 4：
+	 *
+	 * 输入：[3,-2,2,-3]
+	 * 输出：3
+	 * 解释：从子数组 [3] 和 [3,-2,2] 都可以得到最大和 3
+	 * 示例 5：
+	 *
+	 * 输入：[-2,-3,-1]
+	 * 输出：-1
+	 * 解释：从子数组 [-1] 得到最大和 -1
+	 */
+
+	public static int maxSubArraySumCircular(int[] A) {
+		int[] A2= new int[A.length *2];
+		int n = A.length;
+
+
+		/**
+		 *
+		 */
+		for(int i=0;i<n;i++){
+			A2[i] = A2[n+i] = A[i];
+		}
+		/**
+		 * sub[1,3] =sub[4]-sub[1]
+		 * subSum[i,j] =preSum[j+1] - preSum[i]
+		 */
+
+        int n2= A2.length;
+		int[] preSum = new int[n2 +1];
+
+		int sum =0;
+
+		for(int i=0;i< n2;i++){
+			preSum[i] =sum;
+			sum +=A2[i];
+
+		}
+
+		preSum[n2] =sum;
+
+		int result =0;
+
+
+		for (int i=1;i< n2;i++){
+			int j=1;
+			while(j<i){
+				result = Math.max(result,preSum[i] - preSum[j]);
+				j++;
+			}
+		}
+		return result;
+	}
+
+
 
 
 }
