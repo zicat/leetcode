@@ -1,5 +1,7 @@
 package name.zicat.leetcode.sort;
 
+import java.util.Arrays;
+
 /**
  * 冒泡排序
  *  比较相邻两个元素,比较大小,不满足大小关系的情况下互换
@@ -49,8 +51,41 @@ package name.zicat.leetcode.sort;
  *
  * 3 [4] 5 [8] 9 [11] 12
  *
+ *
+ * 堆排序
+ *
+ * 树形的选择排序
+ *
+ * 整体主要由构建初始堆+交换堆顶元素和末尾元素并重建堆两部分组成
+ *
+ * 堆排序的基本思想是：将待排序序列构造成一个大顶堆，
+ * 此时，整个序列的最大值就是堆顶的根节点。
+ * 将其与末尾元素进行交换，此时末尾就为最大值。
+ * 然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列了
+ *
+ * nlogn。所以堆排序时间复杂度最好和最坏情况下都是O(nlogn)级。
+ *
+ *
+ *
  */
 public class Sort {
+
+	public static void main(String[] args) {
+		int[] arr = new int[]{4,6,8,5,9};
+		int length = arr.length;
+		//从最后一个非叶节点开始构建大顶堆
+		for (int i = arr.length/2-1; i >=0; i--) {
+			maximumHeap(i,arr,length);
+		}
+		//从最小的叶子节点开始与根节点进行交换并重新构建大顶堆
+		for (int i = arr.length-1; i >=0; i--) {
+//            System.out.println(Arrays.toString(arr));
+			swap(arr,0,i);
+			length--;
+			maximumHeap(0,arr,length);
+		}
+		System.out.println(Arrays.toString(arr));
+	}
 
 	/**
 	 * 归并排序
@@ -155,6 +190,35 @@ public class Sort {
 		}
 		return left;
 	}
+
+
+	//构建大顶堆
+	public static void maximumHeap(int i,int[] arr,int length){
+		int temp = arr[i];
+		for (int j = i*2+1; j < length; j=j*2+1) {
+			//如果右孩子大于做孩子，则指向右孩子
+			if(j+1<length && arr[j+1]>arr[j]){
+				j++;
+			}
+			//如果最大的孩子大于当前节点，则将大孩子赋给当前节点，修改当前节点为其大孩子节点，再向下走。
+			if(arr[j]>temp){
+				arr[i] = arr[j];
+				i = j;
+			}else{
+				break;
+			}
+		}
+		//将temp放到最终位置
+		arr[i] = temp;
+	}
+	//交换
+	public static void swap(int[] arr,int i,int j){
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+
+
 
 
 }

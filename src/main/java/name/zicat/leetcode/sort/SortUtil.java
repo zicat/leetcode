@@ -362,9 +362,79 @@ public class SortUtil {
 	}
 
 
+	/**
+	 * 字典序的第K小数字
+	 *
+	 * 给定整数 n 和 k，找到 1 到 n 中字典序第 k 小的数字
+	 *
+	 * 字典序的排列是 [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]，所以第二小的数字是 10。
+	 *
+	 *
+	 *              1
+	 *     10    11    12    13
+	 * 100...109 110..119
+	 *
+	 *      2
+	 *
+	 *      3
+	 *
+	 * @param
+	 */
+
+	public static int findKthNumber(int n, int k) {
+		int cur = 1;
+		k = k - 1;//扣除掉第一个0节点
+		while(k>0){
+
+			int num = getNodeNum(n,cur,cur+1);
+
+			if(num<=k){//第k个数不在以cur为根节点的树上
+				cur+=1;//cur在字典序数组中从左往右移动
+				//并且k 去掉 以cur为根节点的 数值
+				k-=num;
+			}else{//在子树中
+				cur*=10;//cur在字典序数组中从上往下移动
+				//从 以10为root开始搜索
+				k-=1;//刨除根节点
+			}
+		}
+		return cur;
+	}
+
+	/**
+	 * rootNode 为1
+	 *   1
+	 * 10 11 12.。。19  [10..19] 9个值  19<20 就是 20-
+	 *
+	 *
+	 * @param n
+	 * @param first
+	 * @param last
+	 * @return
+	 */
+	public static int getNodeNum(int n, long first, long last){
+		int num = 0;
+		while(first <= n){
+			/**
+			 *  rootNode 为1
+			 *  第二层是 last(20,200,2000) - first(10,100,1000)
+			 *
+			 *  rootNode 为 10
+			 *
+			 * 第二层是 last(11,110)  - first(10,100)
+			 *
+			 */
+			num += Math.min(n+1,last) - first;//比如n是195的情况195到100有96个数
+			first *= 10;
+			last *= 10;
+		}
+		return num;
+	}
+
 
 	public static void main(String[] args) {
-		int[] A = {3,1,3,2,2,1,1,1,2,0,0,4,0,1,0,1,1,1,2,2};
-		System.out.println("A = " + Arrays.toString(sortArrayByParity2(A)));;
+		//int[] A = {3,1,3,2,2,1,1,1,2,0,0,4,0,1,0,1,1,1,2,2};
+		//System.out.println("A = " + Arrays.toString(sortArrayByParity2(A)));;
+		findKthNumber(2000,1000);
 	}
 }
